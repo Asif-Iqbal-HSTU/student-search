@@ -1,4 +1,4 @@
-import { Head, useForm, usePage } from '@inertiajs/react';
+import { Head, router, useForm, usePage } from '@inertiajs/react';
 import { PageProps } from '@/types';
 import AppLayout from '@/layouts/app-layout';
 import { FormEvent, useState  } from 'react';
@@ -139,7 +139,9 @@ export default function Dashboard({ students, filters, options }: Props) {
                     {students.data.map((student) => (
                         <tr
                             key={student.id}
-                            onClick={() => openModal(student)}
+                            // onClick={() => openModal(student)}
+                            onClick={() => router.visit(route('students.show', student.id))}
+
                             className="cursor-pointer hover:bg-blue-100 dark:hover:bg-neutral-700 transition"
                         >
                             <td className="border px-4 py-2">{student.student_id.replace(/^'/, '')}</td>

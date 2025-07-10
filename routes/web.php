@@ -1,13 +1,35 @@
 <?php
 
+use App\Http\Controllers\StudentController;
 use App\Models\Student;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
+use Illuminate\Support\Facades\DB;
 
 Route::get('/', function () {
     return Inertia::render('welcome');
 })->name('home');
+
+
+/*Route::get('/new-student-add', function () {
+    return Inertia::render('newStudentAdd');
+})->name('new-student-add');*/
+
+/*Route::get('/new-student-add', function () {
+    return Inertia::render('newStudentAdd', [
+        'students' => [
+            'data' => [], // optional: if you want to show student list
+            'links' => [],
+        ],
+        'filters' => [],
+        'options' => [
+            'batches' => DB::table('students')->distinct()->pluck('batch')->filter()->values(),
+            'programs' => DB::table('students')->distinct()->pluck('program')->filter()->values(),
+            'semesters' => DB::table('students')->distinct()->pluck('adm_semester')->filter()->values(),
+        ]
+    ]);
+})->name('new-student-add');*/
 
 /*Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('dashboard', function () {
@@ -72,6 +94,14 @@ Route::get('/dashboard', function (Request $request) {
         ]
     ]);
 })->name('dashboard');
+
+Route::get('/new-student-add', [StudentController::class, 'create'])->name('new-student-add');
+
+Route::post('/students', [StudentController::class, 'store'])->name('students.store');
+
+
+Route::get('/students/{student}', [StudentController::class, 'show'])->name('students.show');
+
 
 require __DIR__.'/settings.php';
 require __DIR__.'/auth.php';
