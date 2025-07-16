@@ -1,19 +1,17 @@
-// resources/js/Pages/Students/Create.tsx
-
-import React, { useState } from 'react';
 import { Head, useForm, usePage } from '@inertiajs/react';
+import { FormEventHandler, useState } from 'react';
 import AppLayout from '@/layouts/app-layout';
-import {
-    Box, Button, TextField, MenuItem, FormControl, InputLabel, Select, Typography, Divider, Grid
-} from '@mui/material';
 import Modal from '@/Components/Modal';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Button } from '@/components/ui/button';
+import InputError from '@/components/input-error';
 
 const SEMESTERS = ['Summer 2025', 'Summer 2025 (2nd Phase)', 'Fall 2025'];
 const PROGRAMS = ['B.Sc. Engineering in Computer Science and Engineering (CSE)', 'B.Sc. Engineering in Electrical and Electronic Engineering (EEE)',
     'B.Sc. Engineering in Mechanical Engineering (ME)', 'B.Sc. Engineering in Industrial and Production Engineering (IPE)',
     'B.Sc. Engineering in Civil Engineering (CE)', 'B.Sc. Engineering in Information and Communication Technology (ICT)',
-    'Bachelor of Business Administration (BBA)', 'BBA in Accounting & Information Systems (AIS)', 'B.A. (Hons) in English'
-];
+    'Bachelor of Business Administration (BBA)', 'BBA in Accounting & Information Systems (AIS)', 'B.A. (Hons) in English'];
 const DEPTS = ['CSE', 'EEE', 'ME', 'IPE', 'CE', 'ICT', 'BBA', 'AIS', 'English'];
 const GENDER = ['Male', 'Female'];
 const M_Status = ['Married', 'Unmarried'];
@@ -37,13 +35,11 @@ export default function CreateStudent() {
         legal_guardian_name: '', legal_guardian_relation: '', legal_guardian_contact: '',
         village: '', post_code: '', thana: '', district: '',
         ssc_passing_year: '', ssc_institute: '', ssc_roll_no: '', ssc_registration_no: '',
-        ssc_board: '', ssc_gpa: '',
-        hsc_passing_year: '', hsc_institute: '', hsc_roll_no: '', hsc_registration_no: '',
-        hsc_board: '', hsc_gpa: '',
-        image: null, ssc_certificate: null, hsc_certificate: null,
+        ssc_board: '', ssc_gpa: '', hsc_passing_year: '', hsc_institute: '', hsc_roll_no: '',
+        hsc_registration_no: '', hsc_board: '', hsc_gpa: '',
     });
 
-    function handleSubmit(e: React.FormEvent) {
+    const handleSubmit: FormEventHandler = (e) => {
         e.preventDefault();
         post(route('students.store'), {
             onSuccess: () => {
@@ -51,73 +47,56 @@ export default function CreateStudent() {
                 reset();
             },
         });
-    }
+    };
 
-    const renderField = (label: string, field: keyof typeof data, type: string = 'text') => (
-        <Grid item size={{ xs: 12, sm: 6, md: 6 }} key={field}>
-            <TextField
-                label={label}
+    const renderInput = (label: string, field: keyof typeof data, type = 'text') => (
+        <div className="grid w-full gap-2">
+            <Label htmlFor={field}>{label}</Label>
+            <Input
+                id={field}
                 type={type}
-                fullWidth
-                size="medium"
-                variant="outlined"
-                InputLabelProps={type === 'date' ? { shrink: true } : undefined}
-                value={data[field]}
+                value={data[field] as string}
                 onChange={(e) => setData(field, e.target.value)}
-                error={!!errors[field]}
-                helperText={errors[field]}
             />
-        </Grid>
+            <InputError message={errors[field]} />
+        </div>
     );
-
-
-
-    const renderFileField = (label: string, field: keyof typeof data) => (
-        <Grid item size={{ xs: 12, sm: 6, md: 6 }} key={field}>
-            <Button variant="outlined" component="label" fullWidth>
-                {label}
-                <input
-                    type="file"
-                    hidden
-                    onChange={(e) => {
-                        const file = e.target.files?.[0] || null;
-                        setData(field, file);
-                    }}
-                />
-            </Button>
-            {data[field] && typeof data[field] !== 'string' && (
-                <Typography variant="body2" sx={{ mt: 1 }}>
-                    Selected: {(data[field] as File).name}
-                </Typography>
-            )}
-            {errors[field] && <Typography color="error" variant="body2">{errors[field]}</Typography>}
-        </Grid>
-    );
-
 
     const renderSelect = (label: string, field: keyof typeof data, options: string[]) => (
-        <Grid item size={{ xs: 12, sm: 6, md: 6 }} key={field}>
-            <FormControl fullWidth variant="outlined" size="medium" error={!!errors[field]}>
-                <InputLabel>{label}</InputLabel>
-                <Select
-                    label={label}
-                    value={data[field]}
-                    onChange={(e) => setData(field, e.target.value)}
-                >
-                    {options.map(option => (
-                        <MenuItem key={option} value={option}>{option}</MenuItem>
-                    ))}
-                </Select>
-            </FormControl>
-        </Grid>
+        <div className="grid w-full gap-2">
+            <Label htmlFor={field}>{label}</Label>
+            <select
+                id={field}
+                value={data[field] as string}
+                onChange={(e) => setData(field, e.target.value)}
+                className="border rounded-md p-2 bg-background text-foreground"
+            >
+                <option value="">Select</option>
+                {options.map((option) => (
+                    <option key={option} value={option}>{option}</option>
+                ))}
+            </select>
+            <InputError message={errors[field]} />
+        </div>
     );
 
-
-    const renderSection = (title: string) => (
-        <Grid item size={{ xs: 12 }} sx={{ mt: 4 }}>
-            <Typography variant="h6" gutterBottom>{title}</Typography>
-            <Divider sx={{ mb: 2 }} />
-        </Grid>
+    const renderFileField = (label: string, field: keyof typeof data) => (
+        <div className="grid w-full gap-2">
+            <Label htmlFor={field}>{label}</Label>
+            <input
+                id={field}
+                type="file"
+                onChange={(e) => {
+                    const file = e.target.files?.[0] || null;
+                    setData(field, file);
+                }}
+                className="border rounded-md p-2 bg-white text-foreground dark:bg-neutral-800 dark:text-white"
+            />
+            {data[field] && typeof data[field] !== 'string' && (
+                <div className="text-sm text-gray-600 dark:text-gray-300">Selected: {(data[field] as File).name}</div>
+            )}
+            <InputError message={errors[field]} />
+        </div>
     );
 
     return (
@@ -130,85 +109,106 @@ export default function CreateStudent() {
                 </div>
             </Modal>
 
-            <Box component="form" onSubmit={handleSubmit} sx={{ p: 4 }}>
-                <Grid container spacing={3}>
-
-                    {renderSection('Academic Info')}
+            <form onSubmit={handleSubmit} className="space-y-8 px-4 py-6">
+                <h2 className="text-xl font-bold">Academic Info</h2>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     {renderSelect('Department', 'department', DEPTS)}
                     {renderSelect('Program', 'program', PROGRAMS)}
                     {renderSelect('Semester', 'adm_semester', SEMESTERS)}
-                    {renderField('Batch', 'batch')}
-                    {renderField('Admission Date', 'admission_date', 'date')}
-                    {renderField('Session', 'session')}
+                    {renderInput('Batch', 'batch')}
+                    {renderInput('Admission Date', 'admission_date', 'date')}
+                    {renderInput('Session', 'session')}
+                </div>
 
-                    {renderSection('Basic Info')}
-                    {renderField('Student ID', 'student_id')}
-                    {renderField('Registration No', 'registration_no')}
-                    {renderField('Full Name', 'full_name')}
+                <h2 className="text-xl font-bold">Basic Info</h2>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    {renderInput('Student ID', 'student_id')}
+                    {renderInput('Registration No', 'registration_no')}
+                    {renderInput('Full Name', 'full_name')}
                     {renderSelect('Gender', 'gender', GENDER)}
-                    {renderField('Date of Birth', 'dob', 'date')}
+                    {renderInput('Date of Birth', 'dob', 'date')}
                     {renderSelect('Student Status', 'student_status', S_Status)}
-                    {renderField('NID No', 'nid_no')}
-                    {renderField('Birth Cert No', 'birth_cert_no')}
+                    {renderInput('NID No', 'nid_no')}
+                    {renderInput('Birth Certificate No', 'birth_cert_no')}
+                </div>
 
-                    {renderSection('Personal Information')}
-                    {renderField('Religion', 'religion')}
-                    {renderField('Nationality', 'nationality')}
+                <h2 className="text-xl font-bold">Personal Information</h2>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    {renderInput('Religion', 'religion')}
+                    {renderInput('Nationality', 'nationality')}
                     {renderSelect('Marital Status', 'marital_status', M_Status)}
-                    {renderField('Blood Group', 'blood_group')}
+                    {renderInput('Blood Group', 'blood_group')}
                     {renderSelect('Residential Status', 'residential_status', R_Status)}
                     {renderSelect('Covid Vaccine', 'covid_vaccine', C_Vaccine)}
                     {renderSelect('Medical Test', 'medical_test', M_test)}
+                </div>
 
-                    {renderSection('Guardian Info')}
-                    {renderField('Father Name', 'father_name')}
-                    {renderField('Mother Name', 'mother_name')}
-                    {renderField('Father Phone', 'father_tel')}
-                    {renderField('Mother Phone', 'mother_tel')}
-                    {renderField('Father Occupation', 'father_occupation')}
-                    {renderField('Mother Occupation', 'mother_occupation')}
+                <h2 className="text-xl font-bold">Guardian Info</h2>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    {renderInput('Father Name', 'father_name')}
+                    {renderInput('Mother Name', 'mother_name')}
+                    {renderInput('Father Phone', 'father_tel')}
+                    {renderInput('Mother Phone', 'mother_tel')}
+                    {renderInput('Father Occupation', 'father_occupation')}
+                    {renderInput('Mother Occupation', 'mother_occupation')}
+                </div>
 
-                    {renderSection('Legal Guardian Info (if applicable)')}
-                    {renderField('Legal Guardian Name', 'legal_guardian_name')}
-                    {renderField('Legal Guardian Relation', 'legal_guardian_relation')}
-                    {renderField('Legal Guardian Contact', 'legal_guardian_contact')}
+                <h2 className="text-xl font-bold">Legal Guardian Info (if applicable)</h2>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    {renderInput('Legal Guardian Name', 'legal_guardian_name')}
+                    {renderInput('Legal Guardian Relation', 'legal_guardian_relation')}
+                    {renderInput('Legal Guardian Contact', 'legal_guardian_contact')}
+                </div>
 
-                    {renderSection('Contact Info')}
-                    {renderField('Mobile', 'mobile')}
-                    {renderField('Emergency Phone', 'emergency_tel')}
-                    {renderField('Email', 'email')}
-                    {renderSection('Address')}
-                    {renderField('Village', 'village')}
-                    {renderField('Post Code', 'post_code')}
-                    {renderField('Thana', 'thana')}
-                    {renderField('District', 'district')}
+                <h2 className="text-xl font-bold">Contact Info</h2>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    {renderInput('Mobile', 'mobile')}
+                    {renderInput('Emergency Phone', 'emergency_tel')}
+                    {renderInput('Email', 'email')}
+                </div>
 
-                    {renderSection('Education Info (SSC)')}
-                    {renderField('Passing Year', 'ssc_passing_year')}
-                    {renderField('Institute', 'ssc_institute')}
-                    {renderField('Roll No', 'ssc_roll_no')}
-                    {renderField('Registration No', 'ssc_registration_no')}
-                    {renderField('Board', 'ssc_board')}
-                    {renderField('GPA', 'ssc_gpa')}
+                <h2 className="text-xl font-bold">Address</h2>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    {renderInput('Village', 'village')}
+                    {renderInput('Post Code', 'post_code')}
+                    {renderInput('Thana', 'thana')}
+                    {renderInput('District', 'district')}
+                </div>
 
-                    {renderSection('Education Info (HSC)')}
-                    {renderField('Passing Year', 'hsc_passing_year')}
-                    {renderField('Institute', 'hsc_institute')}
-                    {renderField('Roll No', 'hsc_roll_no')}
-                    {renderField('Registration No', 'hsc_registration_no')}
-                    {renderField('Board', 'hsc_board')}
-                    {renderField('GPA', 'hsc_gpa')}
+                <h2 className="text-xl font-bold">Education Info (SSC)</h2>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    {renderInput('Passing Year', 'ssc_passing_year')}
+                    {renderInput('Institute', 'ssc_institute')}
+                    {renderInput('Roll No', 'ssc_roll_no')}
+                    {renderInput('Registration No', 'ssc_registration_no')}
+                    {renderInput('Board', 'ssc_board')}
+                    {renderInput('GPA', 'ssc_gpa')}
+                </div>
 
-                    {renderSection('File Uploads')}
+                <h2 className="text-xl font-bold">Education Info (HSC)</h2>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    {renderInput('Passing Year', 'hsc_passing_year')}
+                    {renderInput('Institute', 'hsc_institute')}
+                    {renderInput('Roll No', 'hsc_roll_no')}
+                    {renderInput('Registration No', 'hsc_registration_no')}
+                    {renderInput('Board', 'hsc_board')}
+                    {renderInput('GPA', 'hsc_gpa')}
+                </div>
+
+
+                <h2 className="text-xl font-bold">File Uploads</h2>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     {renderFileField('Student Image', 'image')}
                     {renderFileField('SSC Certificate', 'ssc_certificate')}
                     {renderFileField('HSC Certificate', 'hsc_certificate')}
+                </div>
 
-                    <Grid item size={{ xs: 12 }} sx={{ textAlign: 'center', mt: 4 }}>
-                        <Button variant="contained" type="submit" disabled={processing}>Submit</Button>
-                    </Grid>
-                </Grid>
-            </Box>
+                <div className="pt-6">
+                    <Button type="submit" className="w-full md:w-auto" disabled={processing}>
+                        Submit
+                    </Button>
+                </div>
+            </form>
         </AppLayout>
     );
 }

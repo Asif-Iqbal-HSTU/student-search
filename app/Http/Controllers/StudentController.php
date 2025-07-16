@@ -18,13 +18,78 @@ class StudentController extends Controller
 
     public function store(Request $request)
     {
-        $validated = $request->validate([
-            'student_id' => 'required|string|max:20',
-            'full_name' => 'required|string',
+        $request->validate([
+            // Basic Info
+            'student_id' => 'required|string|max:20|unique:students,student_id',
+            'full_name' => 'required|string|max:255',
+            'registration_no' => 'nullable|string|max:50',
+            'dob' => 'required|date',
+            'gender' => 'required|in:Male,Female',
+            'student_status' => 'required|string|max:50',
+            'nid_no' => 'nullable|string|max:30',
+            'birth_cert_no' => 'nullable|string|max:30',
+
+            // Academic Info
+            'department' => 'required|string|max:50',
+            'program' => 'required|string|max:255',
+            'adm_semester' => 'required|string|max:50',
+            'batch' => 'required|string|max:10',
+            'admission_date' => 'required|date',
+            'session' => 'nullable|string|max:30',
+
+            // Personal Info
+            'religion' => 'nullable|string|max:50',
+            'nationality' => 'nullable|string|max:50',
+            'marital_status' => 'nullable|string|max:20',
+            'blood_group' => 'nullable|string|max:10',
+            'residential_status' => 'nullable|string|max:20',
+            'covid_vaccine' => 'nullable|in:Yes,No',
+            'medical_test' => 'nullable|in:Yes,No',
+
+            // Contact
+            'mobile' => 'required|string|max:20',
+            'emergency_tel' => 'nullable|string|max:20',
+            'email' => 'nullable|email|max:100',
+
+            // Guardian
+            'father_name' => 'required|string|max:100',
+            'mother_name' => 'required|string|max:100',
+            'father_tel' => 'nullable|string|max:20',
+            'mother_tel' => 'nullable|string|max:20',
+            'father_occupation' => 'nullable|string|max:100',
+            'mother_occupation' => 'nullable|string|max:100',
+
+            // Legal Guardian
+            'legal_guardian_name' => 'nullable|string|max:100',
+            'legal_guardian_relation' => 'nullable|string|max:50',
+            'legal_guardian_contact' => 'nullable|string|max:20',
+
+            // Address
+            'village' => 'nullable|string|max:100',
+            'post_code' => 'nullable|string|max:10',
+            'thana' => 'nullable|string|max:100',
+            'district' => 'nullable|string|max:100',
+
+            // SSC
+            'ssc_passing_year' => 'nullable|string|max:10',
+            'ssc_institute' => 'nullable|string|max:255',
+            'ssc_roll_no' => 'nullable|string|max:20',
+            'ssc_registration_no' => 'nullable|string|max:30',
+            'ssc_board' => 'nullable|string|max:50',
+            'ssc_gpa' => 'nullable|numeric|between:1,5',
+
+            // HSC
+            'hsc_passing_year' => 'nullable|string|max:10',
+            'hsc_institute' => 'nullable|string|max:255',
+            'hsc_roll_no' => 'nullable|string|max:20',
+            'hsc_registration_no' => 'nullable|string|max:30',
+            'hsc_board' => 'nullable|string|max:50',
+            'hsc_gpa' => 'nullable|numeric|between:1,5',
+
+            // Files
             'image' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
             'ssc_certificate' => 'nullable|mimes:pdf,jpg,jpeg,png|max:5120',
             'hsc_certificate' => 'nullable|mimes:pdf,jpg,jpeg,png|max:5120',
-            // validate other fields as needed...
         ]);
 
         $student = Student::create($request->only([
@@ -63,7 +128,7 @@ class StudentController extends Controller
             'district' => $request->district,
         ]);
 
-        $student->educattion()->create([
+        $student->education()->create([
             'ssc_passing_year' => $request->ssc_passing_year,
             'ssc_institute' => $request->ssc_institute,
             'ssc_roll_no' => $request->ssc_roll_no,

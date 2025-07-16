@@ -76,84 +76,121 @@ export default function Dashboard({ students, filters, options }: Props) {
             <Head title="Dashboard" />
 
             {/* Filter Section */}
-            <form onSubmit={handleFilter} className="flex flex-wrap gap-3 p-4 bg-white dark:bg-neutral-900">
-                <input
-                    type="text"
-                    placeholder="Search by ID, Name, Mobile"
-                    value={data.search}
-                    onChange={(e) => setData('search', e.target.value)}
-                    className="border px-3 py-2 rounded w-full md:w-64"
-                />
-                <select
-                    value={data.semester}
-                    onChange={(e) => setData('semester', e.target.value)}
-                    className="border px-3 py-2 rounded w-full md:w-48"
-                >
-                    <option value="">All Semesters</option>
-                    {options.semesters.map((sem) => (
-                        <option key={sem} value={sem}>{sem}</option>
-                    ))}
-                </select>
+            <form onSubmit={handleFilter} className="bg-white p-4 dark:border-neutral-800 dark:bg-neutral-900">
+                <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-5">
+                    <div className="space-y-1">
+                        <label htmlFor="search" className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                            Search by ID, Name, Mobile
+                        </label>
+                        <input
+                            id="search"
+                            type="text"
+                            placeholder="Search..."
+                            value={data.search}
+                            onChange={(e) => setData('search', e.target.value)}
+                            className="w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 dark:border-neutral-700 dark:bg-neutral-800 dark:text-white dark:placeholder:text-gray-400"
+                        />
+                    </div>
 
-                <select
-                    value={data.program}
-                    onChange={(e) => setData('program', e.target.value)}
-                    className="border px-3 py-2 rounded w-full md:w-48"
-                >
-                    <option value="">All Programs</option>
-                    {options.programs.map((program) => (
-                        <option key={program} value={program}>{program}</option>
-                    ))}
-                </select>
+                    <div className="space-y-1">
+                        <label htmlFor="semester" className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                            Semester
+                        </label>
+                        <select
+                            id="semester"
+                            value={data.semester}
+                            onChange={(e) => setData('semester', e.target.value)}
+                            className="w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 dark:border-neutral-700 dark:bg-neutral-800 dark:text-white"
+                        >
+                            <option value="">All Semesters</option>
+                            {options.semesters.map((sem) => (
+                                <option key={sem} value={sem}>
+                                    {sem}
+                                </option>
+                            ))}
+                        </select>
+                    </div>
 
-                <select
-                    value={data.batch}
-                    onChange={(e) => setData('batch', e.target.value)}
-                    className="border px-3 py-2 rounded w-full md:w-48"
-                >
-                    <option value="">All Batches</option>
-                    {options.batches.map((batch) => (
-                        <option key={batch} value={batch}>{batch}</option>
-                    ))}
-                </select>
+                    <div className="space-y-1">
+                        <label htmlFor="program" className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                            Program
+                        </label>
+                        <select
+                            id="program"
+                            value={data.program}
+                            onChange={(e) => setData('program', e.target.value)}
+                            className="w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 dark:border-neutral-700 dark:bg-neutral-800 dark:text-white"
+                        >
+                            <option value="">All Programs</option>
+                            {options.programs.map((program) => (
+                                <option key={program} value={program}>
+                                    {program}
+                                </option>
+                            ))}
+                        </select>
+                    </div>
 
-                <button type="submit" className="bg-blue-600 text-white px-4 py-2 rounded">
-                    Filter
-                </button>
+                    <div className="space-y-1">
+                        <label htmlFor="batch" className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                            Batch
+                        </label>
+                        <select
+                            id="batch"
+                            value={data.batch}
+                            onChange={(e) => setData('batch', e.target.value)}
+                            className="w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 dark:border-neutral-700 dark:bg-neutral-800 dark:text-white"
+                        >
+                            <option value="">All Batches</option>
+                            {options.batches.map((batch) => (
+                                <option key={batch} value={batch}>
+                                    {batch}
+                                </option>
+                            ))}
+                        </select>
+                    </div>
+
+                    <div className="flex items-end pt-1">
+                        <button
+                            type="submit"
+                            className="w-full rounded-md bg-blue-600 px-4 py-2 text-sm font-medium text-white transition hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:ring-offset-neutral-900"
+                        >
+                            Filter
+                        </button>
+                    </div>
+                </div>
             </form>
+
 
             {/* Table */}
             <div className="overflow-x-auto p-4">
-                <table className="w-full text-sm text-left border">
+                <table className="w-full border text-left text-sm">
                     <thead className="bg-gray-200 dark:bg-neutral-800">
-                    <tr>
-                        <th className="border px-4 py-2">Student ID</th>
-                        <th className="border px-4 py-2">Full Name</th>
-                        <th className="border px-4 py-2">Mobile</th>
-                        <th className="border px-4 py-2">Program</th>
-                        <th className="border px-4 py-2">Semester</th>
-                        <th className="border px-4 py-2">Batch</th>
-                    </tr>
+                        <tr>
+                            <th className="border px-4 py-2">Student ID</th>
+                            <th className="border px-4 py-2">Full Name</th>
+                            <th className="border px-4 py-2">Mobile</th>
+                            <th className="border px-4 py-2">Program</th>
+                            <th className="border px-4 py-2">Semester</th>
+                            <th className="border px-4 py-2">Batch</th>
+                        </tr>
                     </thead>
                     <tbody>
-                    {students.data.map((student) => (
-                        <tr
-                            key={student.id}
-                            // onClick={() => openModal(student)}
-                            onClick={() => router.visit(route('students.show', student.id))}
-
-                            className="cursor-pointer hover:bg-blue-100 dark:hover:bg-neutral-700 transition"
-                        >
-                            <td className="border px-4 py-2">{student.student_id.replace(/^'/, '')}</td>
-                            <td className="border px-4 py-2">{student.full_name}</td>
-                            <td className="border px-4 py-2">{student.mobile?.replace(/^'/, '')}</td>
-                            <td className="border px-4 py-2">{student.program}</td>
-                            <td className="border px-4 py-2">{student.adm_semester}</td>
-                            <td className="border px-4 py-2">{student.batch}</td>
-                        </tr>
-                    ))}
+                        {students.data.map((student) => (
+                            <tr
+                                key={student.id}
+                                // onClick={() => openModal(student)}
+                                onClick={() => router.visit(route('students.show', student.id))}
+                                className="cursor-pointer transition hover:bg-blue-100 dark:hover:bg-neutral-700"
+                            >
+                                <td className="border px-4 py-2">{student.student_id.replace(/^'/, '')}</td>
+                                <td className="border px-4 py-2">{student.full_name}</td>
+                                <td className="border px-4 py-2">{student.mobile?.replace(/^'/, '')}</td>
+                                <td className="border px-4 py-2">{student.program}</td>
+                                <td className="border px-4 py-2">{student.adm_semester}</td>
+                                <td className="border px-4 py-2">{student.batch}</td>
+                            </tr>
+                        ))}
                     </tbody>
-
                 </table>
             </div>
 
@@ -165,47 +202,83 @@ export default function Dashboard({ students, filters, options }: Props) {
                         disabled={!link.url}
                         onClick={() => get(link.url || '')}
                         dangerouslySetInnerHTML={{ __html: link.label }}
-                        className={`px-3 py-1 rounded ${link.active ? 'bg-blue-600 text-white' : 'bg-gray-300'}`}
+                        className={`rounded px-3 py-1 ${link.active ? 'bg-blue-600 text-white' : 'bg-gray-300'}`}
                     />
                 ))}
             </div>
             {isModalOpen && selectedStudent && (
                 <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
-                    <div className="bg-white dark:bg-neutral-900 p-6 rounded-lg shadow-lg w-full max-w-lg relative">
-                        <button
-                            onClick={closeModal}
-                            className="absolute top-2 right-2 text-lg font-bold px-2 py-1"
-                        >
+                    <div className="relative w-full max-w-lg rounded-lg bg-white p-6 shadow-lg dark:bg-neutral-900">
+                        <button onClick={closeModal} className="absolute top-2 right-2 px-2 py-1 text-lg font-bold">
                             ×
                         </button>
 
-                        <h2 className="text-xl font-semibold mb-4">Student Profile</h2>
+                        <h2 className="mb-4 text-xl font-semibold">Student Profile</h2>
                         <div className="max-h-[70vh] overflow-y-auto">
-                            <table className="w-full text-sm border border-gray-300 dark:border-neutral-700">
+                            <table className="w-full border border-gray-300 text-sm dark:border-neutral-700">
                                 <tbody>
-                                <tr><td className="font-semibold border px-3 py-2">Student ID</td><td className="border px-3 py-2">{selectedStudent.student_id.replace(/^'/, '')}</td></tr>
-                                <tr><td className="font-semibold border px-3 py-2">Full Name</td><td className="border px-3 py-2">{selectedStudent.full_name}</td></tr>
-                                <tr><td className="font-semibold border px-3 py-2">Date of Birth</td><td className="border px-3 py-2">{selectedStudent.dob || '-'}</td></tr>
-                                <tr><td className="font-semibold border px-3 py-2">Gender</td><td className="border px-3 py-2">{selectedStudent.gender}</td></tr>
-                                <tr><td className="font-semibold border px-3 py-2">Batch</td><td className="border px-3 py-2">{selectedStudent.batch}</td></tr>
-                                <tr><td className="font-semibold border px-3 py-2">Program</td><td className="border px-3 py-2">{selectedStudent.program}</td></tr>
-                                <tr><td className="font-semibold border px-3 py-2">Semester</td><td className="border px-3 py-2">{selectedStudent.adm_semester}</td></tr>
-                                <tr><td className="font-semibold border px-3 py-2">Mobile</td><td className="border px-3 py-2">{selectedStudent.mobile?.replace(/^'/, '')}</td></tr>
-                                <tr><td className="font-semibold border px-3 py-2">Father Name</td><td className="border px-3 py-2">{selectedStudent.father_name}</td></tr>
-                                <tr><td className="font-semibold border px-3 py-2">Father Tel</td><td className="border px-3 py-2">{selectedStudent.father_tel?.replace(/^'/, '')}</td></tr>
-                                <tr><td className="font-semibold border px-3 py-2">Mother Name</td><td className="border px-3 py-2">{selectedStudent.mother_name}</td></tr>
-                                <tr><td className="font-semibold border px-3 py-2">Mother Tel</td><td className="border px-3 py-2">{selectedStudent.mother_tel?.replace(/^'/, '')}</td></tr>
-                                <tr><td className="font-semibold border px-3 py-2">Emergency Tel</td><td className="border px-3 py-2">{selectedStudent.emergency_tel?.replace(/^'/, '')}</td></tr>
-                                <tr><td className="font-semibold border px-3 py-2">Blood Group</td><td className="border px-3 py-2">{selectedStudent.blood_group}</td></tr>
+                                    <tr>
+                                        <td className="border px-3 py-2 font-semibold">Student ID</td>
+                                        <td className="border px-3 py-2">{selectedStudent.student_id.replace(/^'/, '')}</td>
+                                    </tr>
+                                    <tr>
+                                        <td className="border px-3 py-2 font-semibold">Full Name</td>
+                                        <td className="border px-3 py-2">{selectedStudent.full_name}</td>
+                                    </tr>
+                                    <tr>
+                                        <td className="border px-3 py-2 font-semibold">Date of Birth</td>
+                                        <td className="border px-3 py-2">{selectedStudent.dob || '-'}</td>
+                                    </tr>
+                                    <tr>
+                                        <td className="border px-3 py-2 font-semibold">Gender</td>
+                                        <td className="border px-3 py-2">{selectedStudent.gender}</td>
+                                    </tr>
+                                    <tr>
+                                        <td className="border px-3 py-2 font-semibold">Batch</td>
+                                        <td className="border px-3 py-2">{selectedStudent.batch}</td>
+                                    </tr>
+                                    <tr>
+                                        <td className="border px-3 py-2 font-semibold">Program</td>
+                                        <td className="border px-3 py-2">{selectedStudent.program}</td>
+                                    </tr>
+                                    <tr>
+                                        <td className="border px-3 py-2 font-semibold">Semester</td>
+                                        <td className="border px-3 py-2">{selectedStudent.adm_semester}</td>
+                                    </tr>
+                                    <tr>
+                                        <td className="border px-3 py-2 font-semibold">Mobile</td>
+                                        <td className="border px-3 py-2">{selectedStudent.mobile?.replace(/^'/, '')}</td>
+                                    </tr>
+                                    <tr>
+                                        <td className="border px-3 py-2 font-semibold">Father Name</td>
+                                        <td className="border px-3 py-2">{selectedStudent.father_name}</td>
+                                    </tr>
+                                    <tr>
+                                        <td className="border px-3 py-2 font-semibold">Father Tel</td>
+                                        <td className="border px-3 py-2">{selectedStudent.father_tel?.replace(/^'/, '')}</td>
+                                    </tr>
+                                    <tr>
+                                        <td className="border px-3 py-2 font-semibold">Mother Name</td>
+                                        <td className="border px-3 py-2">{selectedStudent.mother_name}</td>
+                                    </tr>
+                                    <tr>
+                                        <td className="border px-3 py-2 font-semibold">Mother Tel</td>
+                                        <td className="border px-3 py-2">{selectedStudent.mother_tel?.replace(/^'/, '')}</td>
+                                    </tr>
+                                    <tr>
+                                        <td className="border px-3 py-2 font-semibold">Emergency Tel</td>
+                                        <td className="border px-3 py-2">{selectedStudent.emergency_tel?.replace(/^'/, '')}</td>
+                                    </tr>
+                                    <tr>
+                                        <td className="border px-3 py-2 font-semibold">Blood Group</td>
+                                        <td className="border px-3 py-2">{selectedStudent.blood_group}</td>
+                                    </tr>
                                 </tbody>
                             </table>
-
                         </div>
-
                     </div>
                 </div>
             )}
-
         </AppLayout>
     );
 }

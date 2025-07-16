@@ -38,7 +38,7 @@ export default function StudentProfile() {
                             <Detail label="Batch" value={student.batch} />
                             <Detail label="Program" value={student.program} />
                             <Detail label="Semester" value={student.adm_semester} />
-                            <Detail label="Mobile" value={student.mobile} />
+                            <Detail label="Mobile" value={student.mobile?.replace(/^'/, '')} />
                             <Detail label="Email" value={student.information?.email} />
                             <Detail label="DOB" value={student.dob} />
                             <Detail label="Gender" value={student.gender} />
@@ -55,10 +55,10 @@ export default function StudentProfile() {
                         <h3 className="text-lg font-semibold mb-4">Guardian & Address</h3>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
                             <Detail label="Father Name" value={student.father_name} />
-                            <Detail label="Father Tel" value={student.father_tel} />
+                            <Detail label="Father Tel" value={student.father_tel?.replace(/^'/, '')} />
                             <Detail label="Mother Name" value={student.mother_name} />
-                            <Detail label="Mother Tel" value={student.mother_tel} />
-                            <Detail label="Emergency Tel" value={student.emergency_tel} />
+                            <Detail label="Mother Tel" value={student.mother_tel?.replace(/^'/, '')} />
+                            <Detail label="Emergency Tel" value={student.emergency_tel?.replace(/^'/, '')} />
                             <Detail label="Guardian Name" value={student.information?.legal_guardian_name} />
                             <Detail label="Guardian Contact" value={student.information?.legal_guardian_contact} />
                             <Detail label="Village" value={student.address?.village} />
