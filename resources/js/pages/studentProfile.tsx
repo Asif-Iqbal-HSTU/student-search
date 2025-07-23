@@ -26,9 +26,11 @@ export default function StudentProfile() {
                             <p className="text-sm text-gray-500">{student.program}</p>
                             <p className="text-sm text-gray-500">{student.student_id}</p>
                         </div>
-                        <a href={fileUrl(student.file?.image)} download className="mt-4 inline-block text-center w-full py-2 px-4 bg-blue-600 text-white rounded hover:bg-blue-700">
-                            Download Image
-                        </a>
+                        {fileUrl(student.file?.image) && (
+                            <a href={fileUrl(student.file?.image)} download className="mt-4 inline-block text-center w-full py-2 px-4 bg-blue-600 text-white rounded hover:bg-blue-700">
+                                Download Image
+                            </a>
+                        )}
                     </div>
 
                     {/* Academic Info */}
@@ -50,20 +52,27 @@ export default function StudentProfile() {
                         </div>
                     </div>
 
-                    {/* Guardian & Address */}
+                    {/* Guardian */}
                     <div className="md:col-span-2 bg-white dark:bg-neutral-800 rounded-lg shadow p-6">
-                        <h3 className="text-lg font-semibold mb-4">Guardian & Address</h3>
+                        <h3 className="text-lg font-semibold mb-4">Guardian</h3>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
                             <Detail label="Father Name" value={student.father_name} />
                             <Detail label="Father Tel" value={student.father_tel?.replace(/^'/, '')} />
                             <Detail label="Mother Name" value={student.mother_name} />
                             <Detail label="Mother Tel" value={student.mother_tel?.replace(/^'/, '')} />
                             <Detail label="Emergency Tel" value={student.emergency_tel?.replace(/^'/, '')} />
-                            <Detail label="Guardian Name" value={student.information?.legal_guardian_name} />
-                            <Detail label="Guardian Contact" value={student.information?.legal_guardian_contact} />
-                            <Detail label="Village" value={student.address?.village} />
-                            <Detail label="Thana" value={student.address?.thana} />
-                            <Detail label="District" value={student.address?.district} />
+                            <Detail label="Legal Guardian Name" value={student.information?.legal_guardian_name} />
+                            <Detail label="Legal Guardian Contact" value={student.information?.legal_guardian_contact} />
+
+                        </div>
+                    </div>
+
+                    {/* Address */}
+                    <div className="md:col-span-2 bg-white dark:bg-neutral-800 rounded-lg shadow p-6">
+                        <h3 className="text-lg font-semibold mb-4">Address</h3>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                            <Detail label="Permanent Address" value={student.full_permanent_address} />
+                            <Detail label="Present Address" value={student.full_present_address} />
                         </div>
                     </div>
 

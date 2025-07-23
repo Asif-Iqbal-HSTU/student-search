@@ -1,5 +1,5 @@
 import { Head, useForm, usePage } from '@inertiajs/react';
-import { FormEventHandler, useState } from 'react';
+import { FormEventHandler, useState, useEffect } from 'react';
 import AppLayout from '@/layouts/app-layout';
 import Modal from '@/Components/Modal';
 import { Input } from '@/components/ui/input';
@@ -26,18 +26,31 @@ export default function CreateStudent() {
     const [showModal, setShowModal] = useState(flashSuccess);
 
     const { data, setData, post, processing, errors, reset } = useForm({
-        student_id: '', full_name: '', father_name: '', mother_name: '', dob: '', gender: '',
+        student_id: '', ugc_id: '', full_name: '', father_name: '', mother_name: '', dob: '', gender: '',
         batch: '', program: '', adm_semester: '', mobile: '', father_tel: '', mother_tel: '',
         emergency_tel: '', blood_group: '', department: '', religion: '', nationality: '',
         marital_status: '', father_occupation: '', mother_occupation: '', student_status: '',
         residential_status: '', email: '', nid_no: '', birth_cert_no: '', admission_date: '',
         session: '', covid_vaccine: '', registration_no: '', medical_test: '',
         legal_guardian_name: '', legal_guardian_relation: '', legal_guardian_contact: '',
-        village: '', post_code: '', thana: '', district: '',
+        perm_village: '', perm_post_code: '', perm_thana: '', perm_district: '',
+        present_village: '', present_post_code: '', present_thana: '', present_district: '',
         ssc_passing_year: '', ssc_institute: '', ssc_roll_no: '', ssc_registration_no: '',
         ssc_board: '', ssc_gpa: '', hsc_passing_year: '', hsc_institute: '', hsc_roll_no: '',
         hsc_registration_no: '', hsc_board: '', hsc_gpa: '',
     });
+
+
+    const [sameAsPermanent, setSameAsPermanent] = useState(false);
+
+    useEffect(() => {
+        if (sameAsPermanent) {
+            setData('present_village', data.perm_village);
+            setData('present_post_code', data.perm_post_code);
+            setData('present_thana', data.perm_thana);
+            setData('present_district', data.perm_district);
+        }
+    }, [sameAsPermanent, data.perm_village, data.perm_post_code, data.perm_thana, data.perm_district, setData]);
 
     const handleSubmit: FormEventHandler = (e) => {
         e.preventDefault();
@@ -119,10 +132,11 @@ export default function CreateStudent() {
                     {renderInput('Admission Date', 'admission_date', 'date')}
                     {renderInput('Session', 'session')}
                 </div>
-
+{/**/}
                 <h2 className="text-xl font-bold">Basic Info</h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     {renderInput('Student ID', 'student_id')}
+                    {renderInput('UGC ID', 'ugc_id')}
                     {renderInput('Registration No', 'registration_no')}
                     {renderInput('Full Name', 'full_name')}
                     {renderSelect('Gender', 'gender', GENDER)}
@@ -167,13 +181,54 @@ export default function CreateStudent() {
                     {renderInput('Email', 'email')}
                 </div>
 
-                <h2 className="text-xl font-bold">Address</h2>
+                {/*<h2 className="text-xl font-bold">Address</h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     {renderInput('Village', 'village')}
                     {renderInput('Post Code', 'post_code')}
                     {renderInput('Thana', 'thana')}
                     {renderInput('District', 'district')}
+                </div>*/}
+
+                <h2 className="text-xl font-bold">Permanent Address</h2>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    {renderInput('Village (Permanent)', 'perm_village')}
+                    {renderInput('Post Code (Permanent)', 'perm_post_code')}
+                    {renderInput('Thana (Permanent)', 'perm_thana')}
+                    {renderInput('District (Permanent)', 'perm_district')}
                 </div>
+
+                <h2 className="text-xl font-bold mt-4">Present Address</h2>
+
+
+                <div className="flex items-center gap-1 mt-2">
+                    <input
+                        id="sameAsPermanent"
+                        type="checkbox"
+                        checked={sameAsPermanent}
+                        onChange={(e) => setSameAsPermanent(e.target.checked)}
+                    />
+                    <Label htmlFor="sameAsPermanent" className="text-sm">
+                        Same as Permanent Address
+                    </Label>
+                </div>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    {renderInput('Village (Present)', 'present_village')}
+                    {renderInput('Post Code (Present)', 'present_post_code')}
+                    {renderInput('Thana (Present)', 'present_thana')}
+                    {renderInput('District (Present)', 'present_district')}
+                </div>
+
+                <div className="mt-4">
+                    <Label htmlFor="full_address">Full Address (Present)</Label>
+                    <Input
+                        id="full_address"
+                        type="text"
+                        value={`${data.present_village || ''}, ${data.present_post_code || ''}, ${data.present_thana || ''}, ${data.present_district || ''}`}
+                        disabled
+                        // className="bg-gray-100 text-black-900 dark:bg-neutral-800 dark:text-white"
+                    />
+                </div>
+
 
                 <h2 className="text-xl font-bold">Education Info (SSC)</h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">

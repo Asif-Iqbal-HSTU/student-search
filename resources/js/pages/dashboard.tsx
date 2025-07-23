@@ -160,6 +160,9 @@ export default function Dashboard({ students, filters, options }: Props) {
                 </div>
             </form>
 
+            <div className="px-4 pt-4 text-sm text-gray-700 dark:text-gray-300">
+                Total Students: <span className="font-semibold">{students.total} </span>(Click a student to view details)
+            </div>
 
             {/* Table */}
             <div className="overflow-x-auto p-4">

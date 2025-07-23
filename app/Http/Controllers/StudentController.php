@@ -21,6 +21,7 @@ class StudentController extends Controller
         $request->validate([
             // Basic Info
             'student_id' => 'required|string|max:20|unique:students,student_id',
+            'ugc_id' => 'required|string|max:20|unique:students,ugc_id',
             'full_name' => 'required|string|max:255',
             'registration_no' => 'nullable|string|max:50',
             'dob' => 'required|date',
@@ -93,7 +94,7 @@ class StudentController extends Controller
         ]);
 
         $student = Student::create($request->only([
-            'student_id', 'full_name', 'father_name', 'mother_name', 'dob', 'gender',
+            'student_id', 'ugc_id', 'full_name', 'father_name', 'mother_name', 'dob', 'gender',
             'batch', 'program', 'adm_semester', 'mobile',
             'father_tel', 'mother_tel', 'emergency_tel', 'blood_group',
         ]));
@@ -121,11 +122,24 @@ class StudentController extends Controller
             'legal_guardian_contact' => $request->legal_guardian_contact,
         ]);
 
-        $student->address()->create([
-            'village' => $request->village,
-            'post_code' => $request->post_code,
-            'thana' => $request->thana,
-            'district' => $request->district,
+        $address = $student->address()->create([
+            'perm_village' => $request->perm_village,
+            'perm_post_code' => $request->perm_post_code,
+            'perm_thana' => $request->perm_thana,
+            'perm_district' => $request->perm_district,
+
+            'present_village' => $request->present_village,
+            'present_post_code' => $request->present_post_code,
+            'present_thana' => $request->present_thana,
+            'present_district' => $request->present_district,
+        ]);
+
+        $fullPermanentAddress = "{$request->perm_village}, {$request->perm_post_code}, {$request->perm_thana}, {$request->perm_district}";
+        $fullPresentAddress = "{$request->present_village}, {$request->present_post_code}, {$request->present_thana}, {$request->present_district}";
+
+        $student->update([
+            'full_permanent_address' => $fullPermanentAddress,
+            'full_present_address' => $fullPresentAddress,
         ]);
 
         $student->education()->create([
