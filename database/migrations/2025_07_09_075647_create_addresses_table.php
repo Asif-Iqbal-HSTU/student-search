@@ -13,14 +13,14 @@ return new class extends Migration
     {
         Schema::create('addresses', function (Blueprint $table) {
             $table->id();$table->foreignId('student_id')->constrained('students')->onDelete('cascade');
-            $table->string('perm_village');
-            $table->string('perm_post_code');
-            $table->string('perm_thana');
-            $table->string('perm_district');
-            $table->string('present_village');
-            $table->string('present_post_code');
-            $table->string('present_thana');
-            $table->string('present_district');
+            $table->string('perm_village')->nullable();
+            $table->string('perm_post_code')->nullable();
+            $table->string('perm_thana')->nullable();
+            $table->string('perm_district')->nullable();
+            $table->string('present_village')->nullable();
+            $table->string('present_post_code')->nullable();
+            $table->string('present_thana')->nullable();
+            $table->string('present_district')->nullable();
             $table->timestamps();
         });
     }

@@ -99,6 +99,11 @@ class StudentController extends Controller
             'father_tel', 'mother_tel', 'emergency_tel', 'blood_group',
         ]));
 
+        $submitted_email = $request->email;
+        if(!$submitted_email){
+            $submitted_email = "Email Not Added";
+        }
+
         $student->information()->create([
             'department' => $request->department,
             'religion' => $request->religion,
@@ -109,7 +114,7 @@ class StudentController extends Controller
             'dob' => $request->info_dob,
             'student_status' => $request->student_status,
             'residential_status' => $request->residential_status,
-            'email' => $request->email,
+            'email' => $submitted_email,
             'nid_no' => $request->nid_no,
             'birth_cert_no' => $request->birth_cert_no,
             'admission_date' => $request->admission_date,

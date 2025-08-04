@@ -7,7 +7,8 @@ import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
 import InputError from '@/components/input-error';
 
-const SEMESTERS = ['Summer 2025', 'Summer 2025 (2nd Phase)', 'Fall 2025'];
+const SEMESTERS = ['Admission Winter 2025 (UGC Prefix: 080251)', 'Admission Summer 2024 (UGC Prefix: 080242)',
+    'Admission Winter 2024 (UGC Prefix: 080241)', 'Admission Summer 2023 (UGC Prefix: 080241)', ];
 const PROGRAMS = ['B.Sc. Engineering in Computer Science and Engineering (CSE)', 'B.Sc. Engineering in Electrical and Electronic Engineering (EEE)',
     'B.Sc. Engineering in Mechanical Engineering (ME)', 'B.Sc. Engineering in Industrial and Production Engineering (IPE)',
     'B.Sc. Engineering in Civil Engineering (CE)', 'B.Sc. Engineering in Information and Communication Technology (ICT)',
