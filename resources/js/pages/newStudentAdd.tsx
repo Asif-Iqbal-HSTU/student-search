@@ -6,9 +6,14 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
 import InputError from '@/components/input-error';
+import Select from 'react-select';
 
-const SEMESTERS = ['Admission Winter 2025 (UGC Prefix: 080251)', 'Admission Summer 2024 (UGC Prefix: 080242)',
-    'Admission Winter 2024 (UGC Prefix: 080241)', 'Admission Summer 2023 (UGC Prefix: 080241)', ];
+const SEMESTERS = ['Admission Summer 2025 (UGC Prefix: 080252)', 'Admission Winter 2025 (UGC Prefix: 080251)',
+    'Admission Summer 2024 (UGC Prefix: 080242)', 'Admission Winter 2024 (UGC Prefix: 080241)',
+    'Admission Summer 2023 (UGC Prefix: 080232)', 'Admission Summer 2023 (UGC Prefix: 080231)',
+    'Admission Summer 2022 (UGC Prefix: 080222)', 'Admission Summer 2022 (UGC Prefix: 080221)',
+    'Admission Summer 2022 (UGC Prefix: 080212)', 'Admission Summer 2022 (UGC Prefix: 080211)',
+];
 const PROGRAMS = ['B.Sc. Engineering in Computer Science and Engineering (CSE)', 'B.Sc. Engineering in Electrical and Electronic Engineering (EEE)',
     'B.Sc. Engineering in Mechanical Engineering (ME)', 'B.Sc. Engineering in Industrial and Production Engineering (IPE)',
     'B.Sc. Engineering in Civil Engineering (CE)', 'B.Sc. Engineering in Information and Communication Technology (ICT)',
@@ -20,6 +25,21 @@ const R_Status = ['Residential', 'Non-Residential'];
 const S_Status = ['General', 'Children of Armed Forces', 'Children of Freedom Fighter', 'Tribal', 'Foreign'];
 const C_Vaccine = ['Yes', 'No'];
 const M_test = ['Yes', 'No'];
+const Religion = ['Islam', 'Hinduism', 'Buddhism', 'Christianism'];
+
+const BANGLADESH_DISTRICTS = [
+    "Bagerhat", "Bandarban", "Barguna", "Barisal", "Bhola", "Bogura", "Brahmanbaria",
+    "Chandpur", "Chapai Nawabganj", "Chattogram", "Chuadanga", "Cox's Bazar", "Cumilla",
+    "Dhaka", "Dinajpur", "Faridpur", "Feni", "Gaibandha", "Gazipur", "Gopalganj",
+    "Habiganj", "Jamalpur", "Jashore", "Jhalokathi", "Jhenaidah", "Joypurhat", "Khagrachari",
+    "Khulna", "Kishoreganj", "Kurigram", "Kushtia", "Lakshmipur", "Lalmonirhat", "Madaripur",
+    "Magura", "Manikganj", "Meherpur", "Moulvibazar", "Munshiganj", "Mymensingh", "Naogaon",
+    "Narail", "Narayanganj", "Narsingdi", "Natore", "Netrokona", "Nilphamari", "Noakhali",
+    "Pabna", "Panchagarh", "Patuakhali", "Pirojpur", "Rajbari", "Rajshahi", "Rangamati",
+    "Rangpur", "Satkhira", "Shariatpur", "Sherpur", "Sirajganj", "Sunamganj", "Sylhet",
+    "Tangail", "Thakurgaon"
+];
+
 
 export default function CreateStudent() {
     const page = usePage().props as any;
@@ -62,6 +82,31 @@ export default function CreateStudent() {
             },
         });
     };
+
+    const [permThanaOptions, setPermThanaOptions] = useState<string[]>([]);
+    const [presentThanaOptions, setPresentThanaOptions] = useState<string[]>([]);
+
+    useEffect(() => {
+        if (data.perm_district && districtThanaMap[data.perm_district]) {
+            setPermThanaOptions(districtThanaMap[data.perm_district]);
+            // Optional: reset thana if district changes
+            setData('perm_thana', '');
+        } else {
+            setPermThanaOptions([]);
+            setData('perm_thana', '');
+        }
+    }, [data.perm_district]);
+
+    useEffect(() => {
+        if (data.present_district && districtThanaMap[data.present_district]) {
+            setPresentThanaOptions(districtThanaMap[data.present_district]);
+            setData('present_thana', '');
+        } else {
+            setPresentThanaOptions([]);
+            setData('present_thana', '');
+        }
+    }, [data.present_district]);
+
 
     const renderInput = (label: string, field: keyof typeof data, type = 'text') => (
         <div className="grid w-full gap-2">
@@ -113,6 +158,141 @@ export default function CreateStudent() {
         </div>
     );
 
+    const renderSearchableSelect = (
+        label: string,
+        field: keyof typeof data,
+        options: string[]
+    ) => {
+        const selectOptions = options.map((d) => ({ label: d, value: d }));
+
+        // Detect dark mode using the `dark` class from Tailwind
+        const isDarkMode = document.documentElement.classList.contains('dark');
+
+        const customStyles = {
+            control: (base: any, state: any) => ({
+                ...base,
+                backgroundColor: isDarkMode ? 'rgb(23, 23, 23)' : 'white',
+                borderColor: state.isFocused ? '#4ade80' : '#4b5563',
+                boxShadow: state.isFocused ? '0 0 0 1px #4ade80' : undefined,
+                '&:hover': {
+                    borderColor: '#4ade80',
+                },
+                color: isDarkMode ? 'white' : 'black',
+            }),
+            singleValue: (base: any) => ({
+                ...base,
+                color: isDarkMode ? 'white' : 'black',
+            }),
+            menu: (base: any) => ({
+                ...base,
+                backgroundColor: isDarkMode ? 'rgb(38, 38, 38)' : 'white',
+                color: isDarkMode ? 'white' : 'black',
+                zIndex: 50,
+            }),
+            option: (base: any, state: any) => ({
+                ...base,
+                backgroundColor: state.isFocused
+                    ? '#4ade80'
+                    : isDarkMode
+                        ? 'rgb(38, 38, 38)'
+                        : 'white',
+                color: state.isFocused ? 'black' : isDarkMode ? 'white' : 'black',
+                cursor: 'pointer',
+            }),
+            input: (base: any) => ({
+                ...base,
+                color: isDarkMode ? 'white' : 'black',
+            }),
+            placeholder: (base: any) => ({
+                ...base,
+                color: isDarkMode ? '#9ca3af' : '#6b7280', // gray-400 / gray-600
+            }),
+        };
+
+        return (
+            <div className="grid w-full gap-2">
+                <Label htmlFor={field}>{label}</Label>
+                <Select
+                    inputId={field}
+                    options={selectOptions}
+                    value={selectOptions.find(opt => opt.value === data[field]) || null}
+                    onChange={(selected) => setData(field, selected?.value || '')}
+                    isClearable
+                    styles={customStyles}
+                    classNamePrefix="react-select"
+                />
+                <InputError message={errors[field]} />
+            </div>
+        );
+    };
+
+    const districtThanaMap: Record<string, string[]> = {
+        "Bagerhat": ["Bagerhat Sadar", "Chitalmari", "Fakirhat", "Kachua", "Mollahat", "Mongla", "Morrelganj", "Rampal", "Sarankhola"],
+        "Bandarban": ["Bandarban Sadar", "Thanchi", "Ruma", "Lama", "Naikhongchhari", "Rowangchhari", "Alikadam"],
+        "Barguna": ["Amtali", "Bamna", "Barguna Sadar", "Betagi", "Patharghata", "Taltali"],
+        "Barisal": ["Agailjhara", "Babuganj", "Bakerganj", "Banaripara", "Gournadi", "Hizla", "Barisal Sadar", "Mehendiganj", "Muladi", "Wazirpur"],
+        "Bhola": ["Bhola Sadar", "Borhanuddin", "Char Fasson", "Daulatkhan", "Lalmohan", "Manpura", "Tazumuddin"],
+        "Bogura": ["Adamdighi", "Bogura Sadar", "Dhunat", "Dupchanchia", "Gabtali", "Kahaloo", "Nandigram", "Sariakandi", "Shajahanpur", "Sherpur", "Sonatala"],
+        "Brahmanbaria": ["Ashuganj", "Banchharampur", "Brahmanbaria Sadar", "Kasba", "Nabinagar", "Nasirnagar", "Sarail", "Bijoynagar"],
+        "Chandpur": ["Chandpur Sadar", "Faridganj", "Haimchar", "Haziganj", "Kachua", "Matlab Dakshin", "Matlab Uttar", "Shahrasti"],
+        "Chattogram": ["Anwara", "Banshkhali", "Boalkhali", "Chandanaish", "Fatikchhari", "Hathazari", "Lohagara", "Mirsharai", "Patiya", "Rangunia", "Raozan", "Sandwip", "Satkania", "Sitakunda", "Chattogram Sadar"],
+        "Chuadanga": ["Alamdanga", "Chuadanga Sadar", "Damurhuda", "Jibannagar"],
+        "Comilla": ["Barura", "Brahmanpara", "Burichang", "Chandina", "Chauddagram", "Comilla Adarsha Sadar", "Comilla Sadar Dakshin", "Daudkandi", "Debidwar", "Homna", "Laksam", "Meghna", "Monohorgonj", "Muradnagar", "Nangalkot", "Titas"],
+        "Cox's Bazar": ["Chakaria", "Cox's Bazar Sadar", "Kutubdia", "Maheshkhali", "Pekua", "Ramu", "Teknaf", "Ukhia"],
+        "Dhaka": ["Dhamrai", "Dohar", "Keraniganj", "Nawabganj", "Savar"],
+        "Dinajpur": ["Birampur", "Birganj", "Biral", "Bochaganj", "Chirirbandar", "Dinajpur Sadar", "Fulbari", "Ghoraghat", "Hakimpur", "Khansama", "Nawabganj", "Parbatipur"],
+        "Faridpur": ["Alfadanga", "Bhanga", "Boalmari", "Charbhadrasan", "Faridpur Sadar", "Madhukhali", "Nagarkanda", "Sadarpur", "Saltha"],
+        "Feni": ["Chhagalnaiya", "Daganbhuiyan", "Feni Sadar", "Parshuram", "Fulgazi", "Sonagazi"],
+        "Gaibandha": ["Fulchhari", "Gaibandha Sadar", "Gobindaganj", "Palashbari", "Sadullapur", "Saghata", "Sundarganj"],
+        "Gazipur": ["Gazipur Sadar", "Kaliakair", "Kaliganj", "Kapasia", "Sreepur"],
+        "Gopalganj": ["Gopalganj Sadar", "Kashiani", "Kotalipara", "Muksudpur", "Tungipara"],
+        "Habiganj": ["Ajmiriganj", "Bahubal", "Baniachong", "Chunarughat", "Habiganj Sadar", "Lakhai", "Madhabpur", "Nabiganj"],
+        "Jamalpur": ["Bakshiganj", "Dewanganj", "Islampur", "Jamalpur Sadar", "Madarganj", "Melandaha", "Sarishabari"],
+        "Jashore": ["Abhaynagar", "Bagherpara", "Chaugachha", "Jhikargachha", "Keshabpur", "Jashore Sadar", "Manirampur", "Sharsha"],
+        "Jhalokati": ["Jhalokati Sadar", "Kathalia", "Nalchity", "Rajapur"],
+        "Jhenaidah": ["Harinakunda", "Jhenaidah Sadar", "Kaliganj", "Kotchandpur", "Maheshpur", "Shailkupa"],
+        "Joypurhat": ["Akkelpur", "Joypurhat Sadar", "Kalai", "Khetlal", "Panchbibi"],
+        "Khagrachari": ["Dighinala", "Khagrachari Sadar", "Lakshmichhari", "Mahalchhari", "Manikchari", "Matiranga", "Panchhari", "Ramgarh"],
+        "Khulna": ["Batiaghata", "Dacope", "Dighalia", "Dumuria", "Koyra", "Paikgachha", "Phultala", "Rupsha", "Terokhada", "Khulna Sadar"],
+        "Kishoreganj": ["Austagram", "Bajitpur", "Bhairab", "Hossainpur", "Itna", "Karimganj", "Katiadi", "Kishoreganj Sadar", "Kuliarchar", "Mithamain", "Nikli", "Pakundia", "Tarail"],
+        "Kurigram": ["Bhurungamari", "Char Rajibpur", "Chilmari", "Kurigram Sadar", "Nageshwari", "Phulbari", "Rajarhat", "Raomari", "Ulipur"],
+        "Kushtia": ["Bheramara", "Daulatpur", "Khoksa", "Kumarkhali", "Kushtia Sadar", "Mirpur"],
+        "Lakshmipur": ["Lakshmipur Sadar", "Ramganj", "Ramgati", "Raipur", "Kamalnagar"],
+        "Lalmonirhat": ["Aditmari", "Hatibandha", "Kaliganj", "Lalmonirhat Sadar", "Patgram"],
+        "Madaripur": ["Kalkini", "Madaripur Sadar", "Rajoir", "Shibchar"],
+        "Magura": ["Magura Sadar", "Mohammadpur", "Shalikha", "Sreepur"],
+        "Manikganj": ["Daulatpur", "Ghior", "Harirampur", "Manikganj Sadar", "Saturia", "Shibalaya", "Singair"],
+        "Meherpur": ["Gangni", "Meherpur Sadar", "Mujibnagar"],
+        "Moulvibazar": ["Barlekha", "Juri", "Kamalganj", "Kulaura", "Moulvibazar Sadar", "Rajnagar", "Sreemangal"],
+        "Munshiganj": ["Gazaria", "Lohajang", "Munshiganj Sadar", "Sirajdikhan", "Sreenagar", "Tongibari"],
+        "Mymensingh": ["Bhaluka", "Dhobaura", "Fulbaria", "Gaffargaon", "Gauripur", "Haluaghat", "Ishwarganj", "Muktagachha", "Mymensingh Sadar", "Nandail", "Phulpur", "Trishal"],
+        "Naogaon": ["Atrai", "Badalgachhi", "Dhamoirhat", "Manda", "Mohadevpur", "Naogaon Sadar", "Niamatpur", "Patnitala", "Porsha", "Raninagar", "Sapahar"],
+        "Narail": ["Kalia", "Lohagara", "Narail Sadar"],
+        "Narayanganj": ["Araihazar", "Bandar", "Narayanganj Sadar", "Rupganj", "Sonargaon"],
+        "Narsingdi": ["Belabo", "Manohardi", "Narsingdi Sadar", "Palash", "Raipura", "Shibpur"],
+        "Natore": ["Bagatipara", "Baraigram", "Gurudaspur", "Lalpur", "Naldanga", "Natore Sadar", "Singra"],
+        "Netrokona": ["Atpara", "Barhatta", "Durgapur", "Khaliajuri", "Kalmakanda", "Kendua", "Madan", "Mohanganj", "Netrokona Sadar", "Purbadhala"],
+        "Nilphamari": ["Dimla", "Domar", "Jaldhaka", "Kishoreganj", "Nilphamari Sadar", "Saidpur"],
+        "Noakhali": ["Begumganj", "Chatkhil", "Companiganj", "Hatiya", "Kabirhat", "Noakhali Sadar", "Senbagh", "Subarnachar"],
+        "Pabna": ["Atgharia", "Bera", "Bhangura", "Chatmohar", "Faridpur", "Ishwardi", "Pabna Sadar", "Santhia", "Sujanagar"],
+        "Panchagarh": ["Atwari", "Boda", "Debiganj", "Panchagarh Sadar", "Tetulia"],
+        "Patuakhali": ["Bauphal", "Dashmina", "Dumki", "Galachipa", "Kalapara", "Mirzaganj", "Patuakhali Sadar", "Rangabali"],
+        "Pirojpur": ["Bhandaria", "Kawkhali", "Mathbaria", "Nazirpur", "Nesarabad", "Pirojpur Sadar", "Zianagar"],
+        "Rajbari": ["Baliakandi", "Goalanda", "Kalukhali", "Pangsha", "Rajbari Sadar"],
+        "Rajshahi": ["Bagha", "Bagmara", "Charghat", "Durgapur", "Godagari", "Mohanpur", "Paba", "Puthia", "Rajshahi Sadar", "Tanore"],
+        "Rangamati": ["Baghaichhari", "Barkal", "Belaichhari", "Juraichhari", "Kaptai", "Langadu", "Naniarchar", "Rajasthali", "Rangamati Sadar"],
+        "Rangpur": ["Badarganj", "Gangachara", "Kaunia", "Mithapukur", "Pirgachha", "Pirganj", "Rangpur Sadar", "Taraganj"],
+        "Satkhira": ["Assasuni", "Debhata", "Kalaroa", "Kaliganj", "Satkhira Sadar", "Shyamnagar", "Tala"],
+        "Shariatpur": ["Bhedarganj", "Damudya", "Gosairhat", "Naria", "Shariatpur Sadar", "Zajira"],
+        "Sherpur": ["Jhenaigati", "Nakla", "Nalitabari", "Sherpur Sadar", "Sreebardi"],
+        "Sirajganj": ["Belkuchi", "Chauhali", "Kamarkhanda", "Kazipur", "Raiganj", "Shahjadpur", "Sirajganj Sadar", "Tarash", "Ullapara"],
+        "Sunamganj": ["Bishwamvarpur", "Chhatak", "Dakshin Sunamganj", "Derai", "Dharampasha", "Dowarabazar", "Jagannathpur", "Jamalganj", "Sullah", "Sunamganj Sadar", "Tahirpur"],
+        "Sylhet": ["Balaganj", "Beanibazar", "Bishwanath", "Companiganj", "Fenchuganj", "Golapganj", "Gowainghat", "Jaintiapur", "Kanaighat", "Sylhet Sadar", "Zakiganj"],
+        "Tangail": ["Basail", "Bhuapur", "Delduar", "Dhanbari", "Ghatail", "Gopalpur", "Kalihati", "Madhupur", "Mirzapur", "Nagarpur", "Sakhipur", "Tangail Sadar"],
+        "Thakurgaon": ["Baliadangi", "Haripur", "Pirganj", "Ranisankail", "Thakurgaon Sadar"]
+    };
+
+
     return (
         <AppLayout breadcrumbs={[{ title: 'Add Student', href: '/students/create' }]}>
             <Head title="Create Student" />
@@ -149,7 +329,8 @@ export default function CreateStudent() {
 
                 <h2 className="text-xl font-bold">Personal Information</h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    {renderInput('Religion', 'religion')}
+                    {/*{renderInput('Religion', 'religion')}*/}
+                    {renderSelect('Religion', 'religion', Religion)}
                     {renderInput('Nationality', 'nationality')}
                     {renderSelect('Marital Status', 'marital_status', M_Status)}
                     {renderInput('Blood Group', 'blood_group')}
@@ -194,8 +375,10 @@ export default function CreateStudent() {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     {renderInput('Village (Permanent)', 'perm_village')}
                     {renderInput('Post Code (Permanent)', 'perm_post_code')}
-                    {renderInput('Thana (Permanent)', 'perm_thana')}
-                    {renderInput('District (Permanent)', 'perm_district')}
+                    {/*{renderInput('Thana (Permanent)', 'perm_thana')}*/}
+                    {/*{renderInput('District (Permanent)', 'perm_district')}*/}
+                    {renderSearchableSelect('District (Permanent)', 'perm_district', BANGLADESH_DISTRICTS)}
+                    {renderSearchableSelect('Thana / Upazilla (Permanent)', 'perm_thana', permThanaOptions)}
                 </div>
 
                 <h2 className="text-xl font-bold mt-4">Present Address</h2>
@@ -215,8 +398,10 @@ export default function CreateStudent() {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     {renderInput('Village (Present)', 'present_village')}
                     {renderInput('Post Code (Present)', 'present_post_code')}
-                    {renderInput('Thana (Present)', 'present_thana')}
-                    {renderInput('District (Present)', 'present_district')}
+                    {/*{renderInput('Thana (Present)', 'present_thana')}*/}
+                    {/*{renderInput('District (Present)', 'present_district')}*/}
+                    {renderSearchableSelect('District (Present)', 'present_district', BANGLADESH_DISTRICTS)}
+                    {renderSearchableSelect('Thana / Upazilla (Present)', 'present_thana', presentThanaOptions)}
                 </div>
 
                 <div className="mt-4">
