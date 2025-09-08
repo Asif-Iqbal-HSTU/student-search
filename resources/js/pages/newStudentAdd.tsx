@@ -373,12 +373,12 @@ export default function CreateStudent() {
 
                 <h2 className="text-xl font-bold">Permanent Address</h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    {renderInput('Village (Permanent)', 'perm_village')}
-                    {renderInput('Post Code (Permanent)', 'perm_post_code')}
                     {/*{renderInput('Thana (Permanent)', 'perm_thana')}*/}
                     {/*{renderInput('District (Permanent)', 'perm_district')}*/}
                     {renderSearchableSelect('District (Permanent)', 'perm_district', BANGLADESH_DISTRICTS)}
                     {renderSearchableSelect('Thana / Upazilla (Permanent)', 'perm_thana', permThanaOptions)}
+                    {renderInput('Post Code (Permanent)', 'perm_post_code')}
+                    {renderInput('Village (Permanent)', 'perm_village')}
                 </div>
 
                 <h2 className="text-xl font-bold mt-4">Present Address</h2>
@@ -396,12 +396,12 @@ export default function CreateStudent() {
                     </Label>
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    {renderInput('Village (Present)', 'present_village')}
-                    {renderInput('Post Code (Present)', 'present_post_code')}
                     {/*{renderInput('Thana (Present)', 'present_thana')}*/}
                     {/*{renderInput('District (Present)', 'present_district')}*/}
                     {renderSearchableSelect('District (Present)', 'present_district', BANGLADESH_DISTRICTS)}
                     {renderSearchableSelect('Thana / Upazilla (Present)', 'present_thana', presentThanaOptions)}
+                    {renderInput('Post Code (Present)', 'present_post_code')}
+                    {renderInput('Village (Present)', 'present_village')}
                 </div>
 
                 <div className="mt-4">
