@@ -206,6 +206,7 @@ class StudentController extends Controller
             'student_status' => 'required|string|max:50',
             'nid_no' => 'nullable|string|max:30',
             'birth_cert_no' => 'nullable|string|max:30',
+            'hall' => 'nullable|string|max:50',
 
             // Academic Info
             'department' => 'required|string|max:50',
@@ -294,6 +295,7 @@ class StudentController extends Controller
             'student_status' => $request->student_status,
             'nid_no' => $request->nid_no,
             'birth_cert_no' => $request->birth_cert_no,
+            'hall' => $request->hall,
 
             'department' => $request->department,
             'program' => $request->program,

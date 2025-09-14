@@ -8,6 +8,9 @@ import { Button } from '@/components/ui/button';
 import InputError from '@/components/input-error';
 import Select from 'react-select';
 import axios from "axios";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+import { format } from 'date-fns';
 
 /*const SEMESTERS = ['Admission Winter 2026 (UGC Prefix: 080261)',
     'Admission Summer 2025 (UGC Prefix: 080252)', 'Admission Winter 2025 (UGC Prefix: 080251)',
@@ -146,6 +149,12 @@ export default function CreateStudent() {
         hsc_registration_no: '', hsc_board: '', hsc_gpa: '', fee_code: '', enrollment_type: '', hall: '', remark: '', academic_session: '',
     });
 
+    useEffect(() => {
+        if (data.adm_semester) {
+            setData("academic_session", data.adm_semester);
+        }
+    }, [data.adm_semester]);
+
 
     const [sameAsPermanent, setSameAsPermanent] = useState(false);
 
@@ -201,6 +210,23 @@ export default function CreateStudent() {
                 type={type}
                 value={data[field] as string}
                 onChange={(e) => setData(field, e.target.value)}
+            />
+            <InputError message={errors[field]} />
+        </div>
+    );
+
+    const renderDateInput = (label: string, field: keyof typeof data) => (
+        <div className="grid w-full gap-2">
+            <Label htmlFor={field}>{label}</Label>
+            <DatePicker
+                id={field}
+                selected={data[field] ? new Date(data[field] as string) : null}
+                onChange={(date: Date | null) =>
+                    setData(field, date ? format(date, "yyyy-MM-dd") : "")
+                }
+                dateFormat="dd/MM/yyyy"
+                placeholderText="dd/mm/yyyy"
+                className="border rounded-md p-2 w-full"
             />
             <InputError message={errors[field]} />
         </div>
@@ -557,7 +583,7 @@ export default function CreateStudent() {
                     {renderInput('Full Name', 'full_name')}
                     {renderInput('Mobile No.', 'mobile')}
                     {renderStudentId()}
-                    {renderInput('Admission Date', 'admission_date', 'date')}
+                    {renderDateInput('Admission Date', 'admission_date', 'date')}
                     {renderInput('Academic Session', 'academic_session')}
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -569,7 +595,7 @@ export default function CreateStudent() {
                     {renderUgcId()}
                     {/*{renderInput('UGC ID', 'ugc_id')}*/}
                     {renderInput('Registration No', 'registration_no')}
-                    {renderInput('Date of Birth', 'dob', 'date')}
+                    {renderDateInput('Date of Birth', 'dob', 'date')}
                     {renderSelect('Student Status', 'student_status', S_Status)}
                     {renderInput('NID No', 'nid_no')}
                     {renderInput('Birth Certificate No', 'birth_cert_no')}
