@@ -101,9 +101,10 @@ const educationBoards = [
 ];
 const Enrollment_Type = ['Fresh Student', 'Transferee Student', 'Readmission Student', 'Internal Package Student', 'Irregular Student', 'Visitor Student'];
 const Halls = [
-    { label: 'Abbas Uddin Ahmed Hall', value: 'Abbas Uddin Ahmed Hall', code: '01' },
-    { label: 'Shaheed Dr. Zikrul Haque Hall', value: 'Shaheed Dr. Zikrul Haque Hall', code: '02' },
-    { label: 'Taramon Bibi Hall', value: 'Taramon Bibi Hall', code: '03' },
+    { label: 'Taramon Bibi Hall', value: 'Taramon Bibi Hall', code: '01' },
+    { label: 'ANNEX Hall', value: 'ANNEX Hall', code: '01' },
+    { label: 'Abbas Uddin Ahmed Hall', value: 'Abbas Uddin Ahmed Hall', code: '02' },
+    { label: 'Shaheed Dr. Zikrul Haque Hall', value: 'Shaheed Dr. Zikrul Haque Hall', code: '04' },
 ];
 const BANGLADESH_DISTRICTS = [
     "Bagerhat", "Bandarban", "Barguna", "Barisal", "Bhola", "Bogura", "Brahmanbaria",
