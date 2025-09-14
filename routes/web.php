@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\StudentController;
 use App\Models\Student;
+use App\Models\Student2;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -66,7 +67,7 @@ Route::get('/', function () {
 Route::get('/dashboard', function (Request $request) {
     $filters = $request->only('search', 'semester', 'program', 'batch');
 
-    $students = Student::query()
+    $students = \App\Models\Student2::query()
         ->when($filters['search'] ?? null, fn($q, $search) =>
         $q->where('student_id', 'like', "%{$search}%")
             ->orWhere('full_name', 'like', "%{$search}%")
@@ -80,9 +81,9 @@ Route::get('/dashboard', function (Request $request) {
         ->withQueryString();
 
     // DISTINCT filter options
-    $semesters = Student::select('adm_semester')->distinct()->pluck('adm_semester');
-    $programs = Student::select('program')->distinct()->pluck('program');
-    $batches = Student::select('batch')->distinct()->pluck('batch');
+    $semesters = Student2::select('adm_semester')->distinct()->pluck('adm_semester');
+    $programs = Student2::select('program')->distinct()->pluck('program');
+    $batches = Student2::select('batch')->distinct()->pluck('batch');
 
     return Inertia::render('dashboard', [
         'students' => $students,
@@ -96,6 +97,7 @@ Route::get('/dashboard', function (Request $request) {
 })->name('dashboard');
 
 Route::get('/new-student-add', [StudentController::class, 'create'])->name('new-student-add');
+Route::get('/students/last-id', [StudentController::class, 'lastStudentId']);
 
 Route::post('/students', [StudentController::class, 'store'])->name('students.store');
 
