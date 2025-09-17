@@ -67,7 +67,7 @@ Route::get('/', function () {
 Route::get('/dashboard', function (Request $request) {
     $filters = $request->only('search', 'semester', 'program', 'batch');
 
-    $students = \App\Models\Student2::query()
+    $students = \App\Models\Student::query()
         ->when($filters['search'] ?? null, fn($q, $search) =>
         $q->where('student_id', 'like', "%{$search}%")
             ->orWhere('full_name', 'like', "%{$search}%")

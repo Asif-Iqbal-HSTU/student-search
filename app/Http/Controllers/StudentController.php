@@ -373,7 +373,7 @@ class StudentController extends Controller
 
 
 
-    public function show(Student2 $student)
+    public function show(Student $student)
     {
 //        $student->load(['information', 'address', 'education', 'file']);
         return Inertia::render('studentProfile', [
