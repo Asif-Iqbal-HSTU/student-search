@@ -160,12 +160,16 @@ export default function Dashboard({ students, filters, options }: Props) {
                 </div>
             </form>
 
+            <div className="px-4 pt-4 text-sm text-gray-700 dark:text-gray-300">
+                Total Students: <span className="font-semibold">{students.total} </span>(Click a student to view details)
+            </div>
 
             {/* Table */}
             <div className="overflow-x-auto p-4">
                 <table className="w-full border text-left text-sm">
                     <thead className="bg-gray-200 dark:bg-neutral-800">
                         <tr>
+                            {/*<th className="border px-4 py-2">SL</th>*/}
                             <th className="border px-4 py-2">Student ID</th>
                             <th className="border px-4 py-2">Full Name</th>
                             <th className="border px-4 py-2">Mobile</th>
@@ -182,6 +186,7 @@ export default function Dashboard({ students, filters, options }: Props) {
                                 onClick={() => router.visit(route('students.show', student.id))}
                                 className="cursor-pointer transition hover:bg-blue-100 dark:hover:bg-neutral-700"
                             >
+                                {/*<td className="border px-4 py-2">{student.id}</td>*/}
                                 <td className="border px-4 py-2">{student.student_id.replace(/^'/, '')}</td>
                                 <td className="border px-4 py-2">{student.full_name}</td>
                                 <td className="border px-4 py-2">{student.mobile?.replace(/^'/, '')}</td>
