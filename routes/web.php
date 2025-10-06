@@ -81,9 +81,9 @@ Route::get('/dashboard', function (Request $request) {
         ->withQueryString();
 
     // DISTINCT filter options
-    $semesters = Student2::select('adm_semester')->distinct()->pluck('adm_semester');
-    $programs = Student2::select('program')->distinct()->pluck('program');
-    $batches = Student2::select('batch')->distinct()->pluck('batch');
+    $semesters = Student::select('adm_semester')->distinct()->pluck('adm_semester');
+    $programs = Student::select('program')->distinct()->pluck('program');
+    $batches = Student::select('batch')->distinct()->pluck('batch');
 
     return Inertia::render('dashboard', [
         'students' => $students,

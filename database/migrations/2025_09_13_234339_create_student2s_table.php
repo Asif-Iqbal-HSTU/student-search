@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('full_name');
             $table->string('father_name')->nullable();
             $table->string('mother_name')->nullable();
-            $table->date('dob')->nullable();
+            $table->string('dob')->nullable();
             $table->string('gender')->nullable();
             $table->string('batch')->nullable();
             $table->string('program')->nullable();
@@ -39,7 +39,7 @@ return new class extends Migration
             $table->string('email')->nullable();
             $table->string('nid_no')->nullable();
             $table->string('birth_cert_no')->nullable();
-            $table->date('admission_date')->nullable();
+            $table->string('admission_date')->nullable();
             $table->string('academic_session')->nullable();
             $table->string('covid_vaccine')->nullable();
             $table->string('registration_no')->nullable();

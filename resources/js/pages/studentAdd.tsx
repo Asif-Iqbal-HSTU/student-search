@@ -6,10 +6,10 @@ import PrimaryButton from "@/Components/PrimaryButton.jsx";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faArrowLeft, faArrowRight} from "@fortawesome/free-solid-svg-icons";
 import SecondaryButton from "@/Components/SecondaryButton.jsx";
-import ReviewerCard from "@/Components/ReviewerCard.jsx";
+// import ReviewerCard from "@/Components/ReviewerCard.jsx";
 import TextInput from "@/Components/TextInput.jsx";
-import AddReviewerForm  from "@/Components/AddReviewerForm.jsx";
-import KeywordField  from "@/Components/KeywordsField.jsx";
+// import AddReviewerForm  from "@/Components/AddReviewerForm.jsx";
+// import KeywordField  from "@/Components/KeywordsField.jsx";
 import AppLayout from '@/layouts/app-layout';
 // import {Inertia} from '@inertiajs/inertia'
 export default function NewManuscript() {
